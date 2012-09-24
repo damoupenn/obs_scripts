@@ -40,17 +40,19 @@ paths = dict(zip(allfiles,[dir_prefix+tJD for tJD in tJDs]))
 
 unique_tJDs = set(tJDs)
 mkdirs = dict(zip(unique_tJDs,[dir_prefix+unique_tJD for unique_tJD in unique_tJDs]))
-print "creating directories"
+if DEBUG: print "creating directories"
 #make the target directories
 for tJD in unique_tJDs:
     print mkdirs[tJD],'..',
     if not os.path.exists(mkdirs[tJD]):
-	os.mkdir(mkdirs[tJD])
-	print "[created]"
-    else: print '[exists]'
+	    os.mkdir(mkdirs[tJD])
+	    if DEBUG: print "[created]"
+    else: 
+        if DEBUG:print '[exists]'
 if DEBUG: "I would have moved the following %d files"%(len(allfiles))
-else: print "moving %d files"%(len(allfiles))
-print "eg. ",paths.keys()[0],paths[paths.keys()[0]]
-for file in paths:
-    print file,paths[file]
-    if not DEBUG: shutil.move(file,paths[file])
+#else: print "moving %d files"%(len(allfiles))
+#print "eg. ",paths.keys()[0],paths[paths.keys()[0]]
+for FILE in paths:
+#    print os.path.join(FILE,paths[FILE])
+    print os.path.join(paths[FILE],os.path.basename(FILE))
+    if not DEBUG: shutil.move(FILE,paths[FILE])
