@@ -1,0 +1,61 @@
+# This file describes the network interfaces available on your system
+# and how to activate them. For more information, see interfaces(5).
+
+# The loopback network interface
+auto lo
+iface lo inet loopback
+
+# The primary network interface
+auto eth0
+iface eth0 inet static
+#digilab address 10.11.0.16
+address 192.168.216.100
+netmask 255.255.255.0
+#digilab gateway 10.11.0.1
+gateway 192.168.216.254
+#digilab dns-nameservers 127.0.0.1 10.11.0.1
+dns-nameservers 127.0.0.1 192.168.193.1 193.168.192.254
+#digilab dns-search paper.pvt tenge.pvt ata.pvt berkeley.edu
+dns-search paper.pvt karoo.kat.ac.za
+
+#auto eth0:0
+#iface eth0:0 inet static
+#address 192.168.10.102
+#netmask 255.255.255.0
+
+auto eth1
+iface eth1 inet static
+address 10.0.1.1
+netmask 255.255.255.0
+
+auto eth1:1
+iface eth1:1 inet static
+address 10.0.2.200
+netmask 255.255.255.0
+
+
+auto eth2
+iface eth2 inet static
+address 10.0.0.4
+netmask 255.255.255.0
+mtu 9000
+
+#iface eth2:0 inet static
+#address 10.0.0.0
+#netmask 255.255.255.0
+#mtu 9000
+
+#iface eth2:1 inet static
+#address 10.0.0.1
+#netmask 255.255.255.0
+#mtu 9000
+
+#iface eth2:2 inet static
+#address 10.0.0.2
+#netmask 255.255.255.0
+#mtu 9000
+
+#iface eth2:3 inet static
+#address 10.0.0.3
+#netmask 255.255.255.0
+#mtu 9000

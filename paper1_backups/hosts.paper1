@@ -1,0 +1,79 @@
+127.0.0.1	localhost
+
+######
+# eth0
+
+# Digital lab
+#10.11.0.16      paper1.ata.pvt
+
+# PSA container (not sure of the domain)
+192.168.216.100 paper1.karoo.kat.ac.za
+
+######
+# eth1
+#
+10.0.1.1    paper1.paper.pvt logserver.paper.pvt catcher.paper.pvt
+
+# paper1 is known as paper4 at Green Bank
+#192.33.116.109   paper4
+
+# 100 Base-T IP address of XG700 10 GbE switch management LAN port
+10.0.1.250 xg700.paper.pvt xg700
+#1GbE network central C&M switch. Login password is P9ls4R*@
+10.0.1.9 netgearsw.paper.pvt netgearsw
+# Data analysis compter
+10.0.1.251 obs.paper.pvt obs
+# LabJack Temperature monitor (on eth1:0)
+10.0.1.101   labjack.paper.pvt labjack
+
+#ROACH IPs set in DHCP
+#CASPER's LX110 Roach1 
+10.0.1.25 roach020125.paper.pvt
+10.0.1.125 roach020125x.paper.pvt
+
+#PAPER's SX95 Roach1
+# px# is functional alias ('p' for paper, 'x' for X engine, # for sequence)
+# po# is functional alias ('p' for paper, 'o' for poco, of course)
+10.0.1.14  roach030214.paper.pvt  px1.paper.pvt
+10.0.1.114 roach030214x.paper.pvt px1x.paper.pvt
+10.0.1.45  roach030145.paper.pvt  px2.paper.pvt
+10.0.1.145 roach030145x.paper.pvt px2x.paper.pvt
+10.0.1.20  roach040120.paper.pvt  px3.paper.pvt
+10.0.1.120 roach040120x.paper.pvt px3x.paper.pvt
+10.0.1.48  roach030248.paper.pvt  px4.paper.pvt
+10.0.1.148 roach030248x.paper.pvt px4x.paper.pvt
+10.0.1.57  roach030257.paper.pvt  px5.paper.pvt
+10.0.1.157 roach030257x.paper.pvt px5x.paper.pvt
+10.0.1.59  roach030259.paper.pvt  px6.paper.pvt
+10.0.1.159 roach030259x.paper.pvt px6x.paper.pvt
+10.0.1.12  roach030212.paper.pvt  px7.paper.pvt
+10.0.1.112 roach030212x.paper.pvt px7x.paper.pvt
+10.0.1.58  roach030258.paper.pvt  px8.paper.pvt
+10.0.1.158 roach030258x.paper.pvt px8x.paper.pvt
+
+# Other paper ROACHes(?)
+10.0.1.44 roach030144.paper.pvt 
+10.0.1.144 roach030144x.paper.pvt
+
+10.0.1.21 roach040121.paper.pvt
+10.0.1.121 roach040121x.paper.pvt
+
+10.0.1.22 roach040122.paper.pvt
+10.0.1.122 roach040122x.paper.pvt
+
+# Still
+10.0.2.100 pot0
+10.0.2.101 pot1
+10.0.2.1 still1
+10.0.2.2 still2
+10.0.2.3 still3
+10.0.2.4 still4
+10.0.2.5 still5
+
+# The following lines are desirable for IPv6 capable hosts
+::1     localhost ip6-localhost ip6-loopback
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+ff02::3 ip6-allhosts
