@@ -1,0 +1,20 @@
+127.0.0.1	localhost
+#127.0.1.1	still2.sas.upenn.edu physics.upenn.edu math.upenn.edu hep.upenn.edu	still2
+
+# The following lines are desirable for IPv6 capable hosts
+::1     ip6-localhost ip6-loopback
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+
+10.0.2.100  pot0
+10.0.2.101  pot1
+
+10.0.2.200  paper1
+
+10.0.2.1 still1
+10.0.2.2 still2
+10.0.2.3 still3
+10.0.2.4 still4
+10.0.2.5 still5
