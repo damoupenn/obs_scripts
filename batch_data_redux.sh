@@ -58,12 +58,20 @@ for FILE in $ARGS; do
 done
 
 # Final clean-up
+
+# time exec_daily_move.sh
+
 for FILE in $ARGS; do
     for TFILE in `get_uv_neighbor.py $FILE`; do
         FILEBASE=`python -c "import os; print os.path.basename('$TFILE')"`
         echo rm -rf ${SCRATCH}/${FILEBASE}*
         time rm -rf ${SCRATCH}/${FILEBASE}*
+        ssh -q -o ConnectTimeout=3 pot0 "python /home/obs/daily_move_pot0.py /data0/${FILEBASE}"
+        ssh -q -o ConnectTimeout=3 pot1 "python /home/obs/daily_move_pot1.py /data1/${FILEBASE}"
+        ssh -q -o ConnectTimeout=3 still2 "python /home/obs/Distillation/daily_move.py ${ENDPATH}/${FILEBASE}cRR[DEF]"
+        ssh -q -o ConnectTimeout=3 still2 "python /home/obs/Distillation/daily_move.py ${ENDPATH}/${FILEBASE}cRE.npz"
     done
 done
+
 
 echo DONE
