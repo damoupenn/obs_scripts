@@ -20,26 +20,22 @@ DEBUG = False
 
 import sys,glob as gl,os,shutil
 
-#make relevant paths
-rootdir = sys.argv[-1]
-if rootdir[-1]==os.path.sep: rootdir = rootdir[:-1]
-rootdir = os.path.dirname(rootdir)
+rootdir = '/home/obs/'
 
-prefix = 'psa'
-dir_prefix = os.path.join(rootdir,prefix)
-
+L_prefix = os.path.join(rootdir,'current_disk/data/psa')
+P0_prefix = os.path.join(rootdir,'data0/psa')
+P1_prefix = os.path.join(rootdir,'data1/psa')
 
 #find files
-#allfiles = gl.glob(os.path.join(rootdir,))
 allfiles = sys.argv[1:]
 JDs = [name.split('.')[1] for name in allfiles]
-tJDs = [name.split('.')[1][-3:] for name in allfiles] #tJD = truncated Julian Date
-#print tJDs,[dir_prefix+tJD for tJD in tJDs]
-paths = dict(zip(allfiles,[dir_prefix+tJD for tJD in tJDs]))
-#print paths
+tJDs = [name.split('.')[1][-4:] for name in allfiles] #tJD = truncated Julian Date
+L_paths = dict(zip(allfiles,[L_prefix+tJD for tJD in tJDs]))
+P0paths = dict(zip(allfiles,[P0_prefix+tJD for tJD in tJDs]))
+P1paths = dict(zip(allfiles,[P1_prefix+tJD for tJD in tJDs]))
 
 unique_tJDs = set(tJDs)
-mkdirs = dict(zip(unique_tJDs,[dir_prefix+unique_tJD for unique_tJD in unique_tJDs]))
+mkdirs = dict(zip(unique_tJDs,[L_prefix+unique_tJD for unique_tJD in unique_tJDs]))
 if DEBUG: print "creating directories"
 #make the target directories
 for tJD in unique_tJDs:
@@ -49,10 +45,23 @@ for tJD in unique_tJDs:
 	    if DEBUG: print "[created]"
     else: 
         if DEBUG:print '[exists]'
-if DEBUG: "I would have moved the following %d files"%(len(allfiles))
-#else: print "moving %d files"%(len(allfiles))
-#print "eg. ",paths.keys()[0],paths[paths.keys()[0]]
-for FILE in paths:
-#    print os.path.join(FILE,paths[FILE])
-    print os.path.join(paths[FILE],os.path.basename(FILE))
-    if not DEBUG: shutil.move(FILE,paths[FILE])
+if DEBUG: print "I would have moved the following %d files"%(len(allfiles))
+
+for FILE in P0paths:
+    newpath = os.path.join(P0paths[FILE], os.path.basename(FILE))
+    if os.path.exists(P0paths[FILE]): 
+        print 'copying to:',newpath
+        if not DEBUG: 
+            os.system('cp -r %s %s' %(FILE,newpath))
+
+for FILE in P1paths:
+    newpath = os.path.join(P1paths[FILE], os.path.basename(FILE))
+    if os.path.exists(P1paths[FILE]): 
+        print 'copying to:',newpath
+        if not DEBUG: 
+            os.system('cp -r %s %s' %(FILE,newpath))
+
+for FILE in L_paths:
+    print 'moving to:',os.path.join(L_paths[FILE],os.path.basename(FILE))
+    if not DEBUG: 
+        os.system('mv %s %s'%(FILE,L_paths[FILE]))
