@@ -4,10 +4,13 @@ import sys,os,optparse
 import datetime
 import time
 import numpy as np
-from pylab import *
+import matplotlib
+matplotlib.use('Agg')
 from matplotlib import dates
+from pylab import *
 
 o = optparse.OptionParser()
+o.add_option('-o','--outfile',dest='outfile',default='today.png',help='Path to the output image file')
 opts,args = o.parse_args(sys.argv[1:])
 
 def fmt_times(jd):
@@ -59,16 +62,13 @@ ftimes = []
 for t in times: ftimes.append(fmt_times(t)) 
 
 fig1 = figure()
-
 #plot v frequency
 axf = fig1.add_subplot(211)
 axf.plot(freqs,vFreq)
 axf.set_xlabel('Frequency [GHz]')
-
 #plot v time
 axt = fig1.add_subplot(212)
 axt.plot_date(times,vTime,'.')
-
 #format dates
 Mfmt = dates.DateFormatter('%m - %d')
 mfmt = dates.DateFormatter('%H:%M')
@@ -77,9 +77,8 @@ axt.xaxis.set_minor_locator(dates.HourLocator(interval=3))
 axt.xaxis.set_minor_formatter(mfmt)
 axt.xaxis.set_major_formatter(Mfmt)
 axt.set_xlabel('UTC')
-
 #title
 f0 = ftimes[0]
 fig1.suptitle('RFI summary for (Y-M-D) %d-%d-%d'%(f0.year,f0.month,f0.day))
-
-show()
+print 'saving to %s' % opts.outfile
+fig1.savefig(opts.outfile,fmt='png')
