@@ -78,7 +78,7 @@ def fmt_times(tstr):
     except(ValueError): return 0.
 
 if NewData:
-    EmailBodyString += '\nCompression Time and Memory Summary:\n\n'
+    EmailBodyString += '\nCOMPRESSION TIME AND MEMORY SUMMARY:\n\n'
     OutDir = None
     BootlegFile = ls_list('%s/Bootleg*'%LastQsub)[0][:-1]
     t,Vmem = 0.,0.
@@ -95,7 +95,7 @@ if NewData:
         EmailBodyString += '\t%d files received in %s\n'%(len(OutFiles),OutDir)
         du = os.popen('du -sh %s'%OutDir).readlines()[0].split('\t')[0]
         EmailBodyString += '\t%s of compressed data generated today.\n'%du 
-        EmailBodyString += '\tReal time = %3.1f minutes.\n' % t
+        EmailBodyString += '\tReal time of compression = %3.1f minutes.\n' % t
         Vmem /= 2**20
         EmailBodyString += '\tMaximum memory usage = %2.2f GB per core.\n' % Vmem
 
@@ -107,6 +107,10 @@ if NewData:
         RFIcommand += ' '.join([ l[:-1] for l in ls_list('%s/*.npz'%OutDir)])
         RFIcommand += ' --outfile=%s/%s' %(LastQsub,'RFIsummary.png') 
         os.system(RFIcommand)
+
+        ##########################
+        # Copy data to shredder? #
+        ##########################
 
 ####################
 #Check Lacie Usage.#
