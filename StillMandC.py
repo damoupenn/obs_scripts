@@ -112,6 +112,15 @@ if NewData:
         # Copy data to shredder? #
         ##########################
 
+##################################
+# Generate plots of Temperatures #
+##################################
+
+TEMPcommand = 'python /home/obs/DailyReports/plot_all_temps.py '
+TEMPcommand += ' -o %s/temps.png' % LastQsub
+TEMPcommand += ' /home/obs/output_data/TemperatureData/*.txt'
+os.system(TEMPcommand)
+
 ####################
 #Check Lacie Usage.#
 ####################
@@ -128,6 +137,7 @@ for disk in LaCies:
 
 msg.attach(MIMEText(EmailBodyString))
 msg.attach(MIMEImage(open('%s/RFIreport.png'%LastQsub).read()))
+msg.attach(MIMEImage(open('%s/temps.png'%LastQsub).read()))
 
 username = 'teampaper'
 password = 'b00lardy'
