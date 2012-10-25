@@ -11,6 +11,8 @@ o.add_option('-n','--ndays',type=int,default=5,help='Number of days to plot')
 o.add_option('-o','--outfile',default='temps.png',help='Destination of figure')
 opts,args = o.parse_args(sys.argv[1:])
 
+args = args[:-1] # Don't plot the file currently being written -- it breaks!
+
 jd = (time() / 86400.) + 2440587.5
 Files2Read = []
 for File in args:
@@ -31,6 +33,7 @@ JD0 = np.floor(JD[0])
 JD -= JD0
 
 figure()
+title('Temperatures for the last %d Days'%opts.ndays)
 plot(JD,Tin,label='LabJack')
 plot(JD,Tout,label='Balun')
 ylabel('Temperature [K]')

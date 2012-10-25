@@ -3,11 +3,13 @@
 Send an email to paperstats.blogger.com filled with the following information:
     - Summary plot of yesterday's RFI flags
     - Summary of yesterday's data compression
+    - Summary of EoR Campaign to date.
     - disk usage.
     - Summary of daily move to shredder.
 """
 
 import sys,os,smtplib
+from time import time
 from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
 from email.mime.multipart import MIMEMultipart
@@ -34,11 +36,14 @@ ThisDir,i = False,0
 LastQsub = ls_list('/home/obs/grid_output/*')
 while(not ThisDir and i <= len(LastQsub)):
     LQ = LastQsub[i][:-1]
+    QsubDate = LQ.split('/')[-1]
     Bootlegs = ls_list('%s/Bootleg*'%LQ)
     Done = True
     for B in Bootlegs: Done = Done and  'DONE' in open(B[:-1]).readlines()[-1]
-    if Done: 
-        QsubDate = LQ.split('/')[-1]
+    if not Done:
+        EmailBodyString += 'Compression currently running on data from %s'%QsubDate
+        i += 1
+    else: 
         if os.path.exists('%s/SentToBlog'%LQ): 
             NewData = False
             ThisDir = True
@@ -46,8 +51,6 @@ while(not ThisDir and i <= len(LastQsub)):
             os.system('touch %s/SentToBlog'%LQ)
         LastQsub = LQ
         ThisDir=True
-    else:
-        i += 1
 
 msg['Subject'] = 'Still obs report for Grid Submission dated %s' % QsubDate
 print 'Reading data from %s' % LastQsub
@@ -112,6 +115,31 @@ if NewData:
         # Copy data to shredder? #
         ##########################
 
+        t0 = time()
+        SENDcommand0 = 'rsync -ruz %s/z*.npz' % OutDir
+        SENDcommand0 += ' damo@folio.sas.upenn.edu:/data4/paper/2012EoR/psa_live/%s/'%OutDir.split('/')[-1]
+        os.system(SENDcommand0)
+        SENDcommand1 = 'rsync -ruz %s/z*RRE' % OutDir
+        SENDcommand1 += ' damo@folio.sas.upenn.edu:/data4/paper/2012EoR/psa_live/%s/'%OutDir.split('/')[-1]
+        os.system(SENDcommand1)
+        t1 = (time()-t0)*60.
+        EmailBodyString += 'Data sent to folio: /data4/paper/2012EoR/psa_live/%s\n'%OutDir.split('/')[-1]
+        EmailBodyString += 'Transfer took %3.1f minutes.\n'%t1
+
+##########################
+# Summarize Eor Campaign #
+##########################
+
+EmailBodyString += '\n 2012 EOR CAMPAIGN SUMMARY:\n\n'
+if NewData: 
+    UPDATEcommand = 'python /home/obs/DailyReports/CampaignStats.py'
+    UPDATEcommand += ' %s'%' '.join([l[:-1] for l in ls_list('%s/z*E'%OutDir)])
+    os.system(UPDATEcommand)
+    for FileName in ls_list('/home/obs/MetaData/*.eor'):
+        Fdat = open(FileName[:-1]).read()
+        FileDescriptor = os.path.basename(FileName.split('.')[0])[1:]
+        EmailBodyString += 'Total %s = %s' %(FileDescriptor,Fdat) 
+
 ##################################
 # Generate plots of Temperatures #
 ##################################
@@ -136,7 +164,7 @@ for disk in LaCies:
     EmailBodyString += '\t'+os.popen('df -h | grep %s'%disk).readlines()[0]+'\n'
 
 msg.attach(MIMEText(EmailBodyString))
-msg.attach(MIMEImage(open('%s/RFIreport.png'%LastQsub).read()))
+if NewData: msg.attach(MIMEImage(open('%s/RFIreport.png'%LastQsub).read()))
 msg.attach(MIMEImage(open('%s/temps.png'%LastQsub).read()))
 
 username = 'teampaper'

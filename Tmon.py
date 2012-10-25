@@ -11,9 +11,12 @@ def get_temps():
 	_T = []
 	_T.append(str(d.getTemperature()))
 	Tb = 0.
-	for i in (2,3):
-		Tb += 0.5 * V2K(d.readRegister(i))
-	_T.append(str(Tb))
+	try:
+		for i in (2,3):
+			Tb += 0.5 * V2K(d.readRegister(i))
+		_T.append(str(Tb))
+	except(IndexError):
+		return None	
 	return '\t'.join(_T)
 def get_Tstring():
 	return '%s\t%s'%(get_jd(),get_temps())
@@ -39,13 +42,15 @@ while True:
 		i_samp = 0
 		jd,t1,t2 = 0.,0.,0.
 		while i_samp < NperInt:
-			_jd,_t1,_t2 = get_Tstring().split('\t')
+			if not get_Tstring() is None:
+				_jd,_t1,_t2 = get_Tstring().split('\t')
+				jd += float(_jd)
+				t1 += float(_t1)
+				t2 += float(_t2)
 			sleep(SperSamp)
-			jd += float(_jd)/float(NperInt)
-			t1 += float(_t1)/float(NperInt)
-			t2 += float(_t2)/float(NperInt)
 			i_samp += 1
-		Tstr = '%f\t%f\t%f\n'%(jd,t1,t2)
+		i_samp = float(i_samp)
+		Tstr = '%f\t%f\t%f\n'%(jd/i_samp,t1/i_samp,t2/i_samp)
 		f.write(Tstr)
 		i_int += 1
 	f.close()
